@@ -2,6 +2,7 @@ import React from "react";
 
 export interface IBooksResponse {
     items: IBook[];
+    totalItems: number,
 }
 
 export interface IBook {
