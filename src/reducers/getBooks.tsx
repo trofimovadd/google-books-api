@@ -1,36 +1,47 @@
 import { GET_BOOKS_FAILURE, GET_BOOKS_LOADING, GET_BOOKS_SUCCESS } from "../actions/actionTypes"
+import { IBook } from "../components/BookCard"
 
-export interface IAction {
+export type IAction = {
     type: string,
     payload: object,
 }
 
-const initialState = {
+export interface IHomePageState {
+    isLoading: boolean,
+    books: IBook[],
+    totalItems: number,
+}
+
+const initialState: IHomePageState = {
     isLoading: false,
     books: [],
     totalItems: 0,
 }
 
-export const getBooks = {}
+export const getBooksReducer = (state = initialState, action: IAction): IHomePageState => {
+    switch (action.type) {
+        case GET_BOOKS_LOADING:
+            console.log("getBooksSuccess 3 GET_BOOKS_LOADING")
 
-// export const getBooks = (state = initialState, action: IAction) => {
-//     switch (action.type) {
-//         case GET_BOOKS_LOADING:
-//             return {
-//                 ...state,
-//                 books: action.payload,
-//             }
+            return {
+                ...state,
+                isLoading: true,
+            }
 
-//         case GET_BOOKS_SUCCESS:
-//             return {
-//                 ...state,
-//                 books: action.payload,
-//             }
+        case GET_BOOKS_SUCCESS:
+            console.log("getBooksSuccess 2 books: " + JSON.stringify(action.payload))
+            return {
+                ...state,
+                books: action.payload as IBook[],
+                isLoading: false,
+            }
 
-//         case GET_BOOKS_FAILURE:
-//             return {
-//                 ...state,
-//                 books: action.payload,
-//             }
-//     }
-// }
+        case GET_BOOKS_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+            }
+        default:
+            return state
+    }
+}

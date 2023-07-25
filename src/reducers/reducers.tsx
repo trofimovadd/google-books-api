@@ -1,3 +1,10 @@
 import { combineReducers } from 'redux'
+import { IHomePageState, getBooksReducer } from './getBooks';
 
-export const reducers = combineReducers({});
+export interface RootState {
+    booksState: IHomePageState,
+} 
+
+export const rootReducer = combineReducers<RootState>({
+    booksState: getBooksReducer
+});

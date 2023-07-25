@@ -1,41 +1,27 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./styles.css";
 import BookCard from "./BookCard";
 import { IBook, IBooksResponse } from "./BookCard";
 import Loader from "./Loader";
+import { IHomePageState } from "../reducers/getBooks";
+import { fetchBooks } from "../actions/actionCreators";
+import { Dispatch } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { RootState } from "../reducers/reducers";
 
-const HomePage: React.FC = () => {
+export const HomePage: React.FC = () => {
     const [search, setSearch] = useState("");
-    const [data, setData] = useState<IBooksResponse>();
-    const [isLoading, setLoading] = useState(true);
+
+    // const state = useAppSelector((state) => state)
+    const state = useSelector((state: RootState) => state.booksState)
+    console.log("BookSize: " + (state.books?.length))
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
-        searchBook();
+        dispatch(fetchBooks(search));
     }, []);
 
-    const searchBook = () => {
-        setLoading(true);
-
-        setTimeout(() => {
-            axios
-                .get<IBooksResponse>("https://www.googleapis.com/books/v1/volumes", {
-                    params: {
-                        key: "AIzaSyDdYteQCR8RpyES-XzoCactqKtx3-A6fh8",
-                        maxResults: 30,
-                        ...("q" ? { q: search } : {}),
-                    },
-                })
-                .then((response) => {
-                    console.log(response.data.items);
-                    setData(response.data);
-                })
-                .catch((error) => console.log(error))
-                .finally(() => {
-                    setLoading(false);
-                });
-        }, 2000);
-    };
     return (
         <>
             <div className="header">
@@ -47,10 +33,12 @@ const HomePage: React.FC = () => {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         onKeyDown={(e) => {
-                            if (e.key === "Enter") searchBook();
+                            if (e.key === "Enter") dispatch(fetchBooks(search));;
                         }}
                     />
-                    <button onClick={searchBook}>
+                    <button onClick={() => {
+                        dispatch(fetchBooks(search))
+                    }}>
                         <i className="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
@@ -76,13 +64,13 @@ const HomePage: React.FC = () => {
             </div>
 
             <div className="content">
-                {isLoading ? (
+                {state.isLoading ? (
                     <Loader />
                 ) : (
                     <>
-                        <div className="found">Found {} results</div>
+                        <div className="found">Found { } results</div>
                         <div className="cards">
-                            {data?.items.map((book: IBook) => {
+                            {state.books?.map((book: IBook) => {
                                 return <BookCard book={book}></BookCard>;
                             })}
                         </div>
