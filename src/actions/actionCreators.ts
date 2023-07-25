@@ -1,8 +1,7 @@
 import axios from "axios";
-import { IBook, IBooksResponse } from "../components/BookCard";
 import { Dispatch } from "@reduxjs/toolkit";
-import { store } from "../store";
 import { RootState } from "../reducers/reducers";
+import BooksResponse, { BookInfo } from "../types/BookResponse";
 
 export enum ActionTypes {
   GET_BOOKS_LOADING = "GET_BOOKS_LOADING",
@@ -27,7 +26,7 @@ interface BooksFailure {
 
 interface BooksSuccess {
   type: ActionTypes.GET_BOOKS_SUCCESS;
-  payload: { items: IBook[]; totalItems: number };
+  payload: { items: BookInfo[]; totalItems: number };
 }
 
 interface UpdateSearch {
@@ -62,7 +61,7 @@ const getBooksFailure = (e: any): BooksFailure => {
   };
 };
 
-const getBooksSuccess = (data: IBooksResponse): BooksSuccess => {
+const getBooksSuccess = (data: BooksResponse): BooksSuccess => {
   return {
     type: ActionTypes.GET_BOOKS_SUCCESS,
     payload: {
@@ -83,7 +82,7 @@ export const fetchBooks = () => {
     const sortingBy = bookState.sortingBy;
 
     axios
-      .get<IBooksResponse>("https://www.googleapis.com/books/v1/volumes", {
+      .get<BooksResponse>("https://www.googleapis.com/books/v1/volumes", {
         params: {
           key: "AIzaSyDdYteQCR8RpyES-XzoCactqKtx3-A6fh8",
           maxResults: 30,

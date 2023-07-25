@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { IHomePageState, getBooksReducer } from './getBooks';
+import { IHomePageState, getBooksReducer } from './getBooksReducer';
 
 export interface RootState {
     booksState: IHomePageState,

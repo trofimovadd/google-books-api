@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./styles.css";
 import BookCard from "./BookCard";
-import { IBook, IBooksResponse } from "./BookCard";
 import Loader from "./Loader";
-import { IHomePageState } from "../reducers/getBooks";
 import { addNextPage, fetchBooks, updateCategory, updateSearch, updateSortingBy } from "../actions/actionCreators";
-import { Dispatch } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { RootState } from "../reducers/reducers";
+import { BookInfo } from "../types/BookResponse";
 
 export const HomePage: React.FC = () => {
     const state = useSelector((state: RootState) => state.booksState)
@@ -25,7 +23,7 @@ export const HomePage: React.FC = () => {
                 <div className="search">
                     <input
                         type="text"
-                        placeholder="type your book's name..."
+                        placeholder="Type your book's name..."
                         value={state.searchString}
                         onChange={(e) => dispatch(updateSearch(e.target.value))}
                         onKeyDown={(e) => {
@@ -70,7 +68,7 @@ export const HomePage: React.FC = () => {
             <div className="content">
                 {state.isLoading ? null : <div className="found">Found {state.totalItems} results</div>}
                 <div className="cards">
-                    {state.books?.map((book: IBook) => {
+                    {state.books?.map((book: BookInfo) => {
                         return <BookCard book={book}></BookCard>;
                     })}
                 </div>

@@ -1,9 +1,9 @@
 import { Action, ActionTypes } from "../actions/actionCreators"
-import { IBook } from "../components/BookCard"
+import { BookInfo } from "../types/BookResponse"
 
 export interface IHomePageState {
     isLoading: boolean,
-    books: IBook[],
+    books: BookInfo[],
     totalItems: number,
     page: number,
     searchString: string,
@@ -31,7 +31,6 @@ export const getBooksReducer = (state = initialState, action: Action): IHomePage
             }
 
         case ActionTypes.GET_BOOKS_SUCCESS:
-            console.log("getBooksSuccess 2 books: " + JSON.stringify(action.payload))
             const books = state.page == 1 ? action.payload.items : state.books.concat(action.payload.items)
 
             return {
