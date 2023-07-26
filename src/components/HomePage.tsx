@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import "./styles.css";
 import BookCard from "./BookCard";
 import Loader from "./Loader";
-import { addNextPage, fetchBooks, updateCategory, updateSearch, updateSortingBy } from "../actions/actionCreators";
+import { fetchBooks, fetchNextBooks, updateCategory, updateSearch, updateSortingBy } from "../actions/actions";
 import { useSelector } from "react-redux";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useAppDispatch } from "../store/hooks";
 import { RootState } from "../reducers/reducers";
 import { BookInfo } from "../types/BookResponse";
 
@@ -12,16 +12,13 @@ export const HomePage: React.FC = () => {
     const state = useSelector((state: RootState) => state.booksState)
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(fetchBooks());
-    }, []);
-
     return (
         <>
             <div className="header">
                 <h1>Find your book</h1>
                 <div className="search">
                     <input
+                        className="form-control"
                         type="text"
                         placeholder="Type your book's name..."
                         value={state.searchString}
@@ -30,7 +27,7 @@ export const HomePage: React.FC = () => {
                             if (e.key === "Enter") dispatch(fetchBooks());
                         }}
                     />
-                    <button onClick={() => {
+                    <button className="btn btn-outline" onClick={() => {
                         dispatch(fetchBooks())
                     }}>
                         <i className="fa-solid fa-magnifying-glass"></i>
@@ -39,10 +36,10 @@ export const HomePage: React.FC = () => {
 
                 <div className="filters">
                     <span>Categories: </span>
-                    <select onChange={(e) => {
-                        dispatch(updateCategory(e.target.value))
-                        dispatch(fetchBooks())
-                    }}
+                    <select className="form-select form-select-sm text-secondary"
+                        onChange={(e) => {
+                            dispatch(updateCategory(e.target.value))
+                        }}
                         value={state.category}>
                         <option value="all">all</option>
                         <option value="art">art</option>
@@ -54,10 +51,10 @@ export const HomePage: React.FC = () => {
                     </select>
 
                     <span>Sorting by </span>
-                    <select onChange={(e) => {
-                        dispatch(updateSortingBy(e.target.value))
-                        dispatch(fetchBooks())
-                    }}
+                    <select className="form-select form-select-sm text-secondary"
+                        onChange={(e) => {
+                            dispatch(updateSortingBy(e.target.value))
+                        }}
                         value={state.sortingBy}>
                         <option value="relevance">relevance</option>
                         <option value="newest">newest</option>
@@ -77,8 +74,7 @@ export const HomePage: React.FC = () => {
                     <button
                         className="loadMore"
                         onClick={() => {
-                            dispatch(addNextPage())
-                            dispatch(fetchBooks())
+                            dispatch(fetchNextBooks())
                         }}>
                         Load more</button> : null}
             </div>

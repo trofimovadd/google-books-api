@@ -1,4 +1,5 @@
-import { Action, ActionTypes } from "../actions/actionCreators"
+import { Action } from "../actions/actions"
+import { ActionTypes } from "../actions/actionTypes"
 import { BookInfo } from "../types/BookResponse"
 
 export interface IHomePageState {
@@ -23,23 +24,34 @@ const initialState: IHomePageState = {
 
 export const getBooksReducer = (state = initialState, action: Action): IHomePageState => {
     switch (action.type) {
+        case ActionTypes.CLEAR_BOOKS:
+            return {
+                ...state,
+                books: [],
+            }
+
         case ActionTypes.GET_BOOKS_LOADING:
             return {
                 ...state,
                 isLoading: true,
-                ...(state.page == 1 ? { books: [] } : {}),
             }
 
         case ActionTypes.GET_BOOKS_SUCCESS:
-            const books = state.page == 1 ? action.payload.items : state.books.concat(action.payload.items)
-
             return {
                 ...state,
-                books: books.filter((b) => b?.volumeInfo),
+                books: action.payload.items,
                 totalItems: action.payload.totalItems,
+                page: 1,
                 isLoading: false,
             }
 
+        case ActionTypes.GET_NEXT_BOOKS_SUCCESS:
+            return {
+                ...state,
+                books: state.books.concat(action.payload.items),
+                page: state.page + 1,
+                isLoading: false,
+            }
         case ActionTypes.GET_BOOKS_FAILURE:
             return {
                 ...state,
@@ -67,12 +79,6 @@ export const getBooksReducer = (state = initialState, action: Action): IHomePage
                 sortingBy: action.payload.sortingBy,
                 page: 1,
                 books: [],
-            }
-
-        case ActionTypes.ADD_NEXT_PAGE:
-            return {
-                ...state,
-                page: state.page + 1
             }
 
         default:
