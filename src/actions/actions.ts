@@ -12,11 +12,18 @@ import {
   UpdateCategory,
   UpdateSortingBy,
   BooksSuccess,
+  EmptySearchError,
 } from "./actionTypes";
 
 const clearBooks = (): ClearBooks => {
   return {
     type: ActionTypes.CLEAR_BOOKS,
+  };
+};
+
+const emptySearchError = (): EmptySearchError => {
+  return {
+    type: ActionTypes.EMPTY_SEARCH_ERROR,
   };
 };
 
@@ -75,17 +82,14 @@ const getBooks = (
   };
 
   return axios
-    .get<BooksResponse>("https://www.googleapis.com/books/v1/volumes", params)
-    .then((response) => {
-      console.log(response.data.items);
-      return response;
-    });
+    .get<BooksResponse>("https://www.googleapis.com/books/v1/volumes", params);
 };
 
 export const fetchBooks = () => {
   return (dispatch: Dispatch, getState: () => RootState) => {
     const bookState = getState().booksState;
     if (!bookState.searchString) {
+      dispatch(emptySearchError());
       return;
     }
 
@@ -109,9 +113,9 @@ export const fetchNextBooks = () => {
     const bookState = getState().booksState;
     dispatch(getBooksLoading());
     getBooks(
-      bookState.searchString,
-      bookState.category,
-      bookState.sortingBy,
+      bookState.oldSearchString,
+      bookState.oldCategory,
+      bookState.oldSortingBy,
       bookState.page + 1
     )
       .then((response) => {
@@ -147,6 +151,7 @@ export const updateSortingBy = (sortingBy: string): UpdateSortingBy => {
 
 export type Action =
   | ClearBooks
+  | EmptySearchError
   | BooksLoading
   | BooksFailure
   | BooksSuccess

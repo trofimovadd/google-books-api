@@ -8,7 +8,6 @@ export interface BookProps {
 const BookCard: React.FC<BookProps> = (props: BookProps) => {
     const info = props.book.volumeInfo;
     const cover = info.imageLinks;
-    console.log(props.book.volumeInfo)
 
     return (
         <>

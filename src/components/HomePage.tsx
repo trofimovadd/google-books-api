@@ -63,10 +63,11 @@ export const HomePage: React.FC = () => {
             </div>
 
             <div className="content">
+                {state.error ? <div className="error">Error: {state.error}</div> : null}
                 {state.isLoading ? null : <div className="found">Found {state.totalItems} results</div>}
                 <div className="cards">
                     {state.books?.map((book: BookInfo) => {
-                        return <BookCard book={book}></BookCard>;
+                        return <BookCard key={book.id} book={book}></BookCard>;
                     })}
                 </div>
 

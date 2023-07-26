@@ -2,6 +2,7 @@ import { BookInfo } from "../types/BookResponse";
 
 export enum ActionTypes {
   CLEAR_BOOKS = "CLEAR_BOOKS",
+  EMPTY_SEARCH_ERROR = "EMPTY_SEARCH_ERROR",
   GET_BOOKS_LOADING = "GET_BOOKS_LOADING",
   GET_BOOKS_FAILURE = "GET_BOOKS_FAILURE",
   GET_BOOKS_SUCCESS = "GET_BOOKS_SUCCESS",
@@ -15,6 +16,10 @@ export enum ActionTypes {
 
 export interface ClearBooks {
   type: ActionTypes.CLEAR_BOOKS;
+}
+
+export interface EmptySearchError {
+  type: ActionTypes.EMPTY_SEARCH_ERROR;
 }
 
 export interface BooksLoading {

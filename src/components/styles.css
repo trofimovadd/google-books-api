@@ -66,6 +66,11 @@
     margin-top: 10px;
 }
 
+.error {
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
 .card {
     background-color: rgb(228, 228, 228);
     padding: 10px;
@@ -98,4 +103,19 @@
 
 .loadMore:hover {
     text-decoration: underline;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(2rem);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu {
+    animation: fadeIn 0.2s ease-in-out;
 }

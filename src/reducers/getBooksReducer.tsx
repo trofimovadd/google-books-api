@@ -4,22 +4,34 @@ import { BookInfo } from "../types/BookResponse"
 
 export interface IHomePageState {
     isLoading: boolean,
+    error: string,
     books: BookInfo[],
     totalItems: number,
     page: number,
+
     searchString: string,
     category: string,
     sortingBy: string,
+
+    oldSearchString: string,
+    oldCategory: string,
+    oldSortingBy: string,
 }
 
 const initialState: IHomePageState = {
     isLoading: false,
+    error: "",
     books: [],
     totalItems: 0,
     page: 1,
+
     searchString: "",
-    category: "",
-    sortingBy: "",
+    category: "all",
+    sortingBy: "relevance",
+
+    oldSearchString: "",
+    oldCategory: "",
+    oldSortingBy: "",
 }
 
 export const getBooksReducer = (state = initialState, action: Action): IHomePageState => {
@@ -28,6 +40,12 @@ export const getBooksReducer = (state = initialState, action: Action): IHomePage
             return {
                 ...state,
                 books: [],
+            }
+
+        case ActionTypes.EMPTY_SEARCH_ERROR:
+            return {
+                ...state,
+                error: "Please enter book's name",
             }
 
         case ActionTypes.GET_BOOKS_LOADING:
@@ -43,6 +61,10 @@ export const getBooksReducer = (state = initialState, action: Action): IHomePage
                 totalItems: action.payload.totalItems,
                 page: 1,
                 isLoading: false,
+
+                oldSearchString: state.searchString,
+                oldCategory: state.category,
+                oldSortingBy: state.sortingBy,
             }
 
         case ActionTypes.GET_NEXT_BOOKS_SUCCESS:
@@ -62,23 +84,19 @@ export const getBooksReducer = (state = initialState, action: Action): IHomePage
             return {
                 ...state,
                 searchString: action.payload.search,
-                page: 1,
+                error: "",
             }
 
         case ActionTypes.UPDATE_CATEGORY:
             return {
                 ...state,
                 category: action.payload.category,
-                page: 1,
-                books: [],
             }
 
         case ActionTypes.UPDATE_SORTING_BY:
             return {
                 ...state,
                 sortingBy: action.payload.sortingBy,
-                page: 1,
-                books: [],
             }
 
         default:

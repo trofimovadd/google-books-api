@@ -5,6 +5,7 @@ export interface BooksResponse {
 
 export interface BookInfo {
   volumeInfo: BookVolumeInfo;
+  id: string,
 }
 
 export interface BookVolumeInfo {
